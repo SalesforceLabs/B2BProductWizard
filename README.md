@@ -24,14 +24,31 @@ You also must have read access to the following objects (and their fields):
 
 ## Installation
 
-Install the managed package using this URL:
+Install the managed package from the AppExchange using this URL:
 
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6g000008GBbfAAG
 
+To install the source in this repo, clone the repo, then issue this command in the Salesforce CLI:
+
+    sfdx force:source:deploy -x manifest/package.xml -u [targetusername]
+
+Or, if you have the Salesforce Extension Pack installed, right-click on the manifest/package.xml file and select 
+
+    SDFX: Deploy Source in Manifest to Org
+
+This will deploy the source to whatever org you have associated with your SF DX project as the user org.
 
 ## Usage
 
 Add the B2B Commerce Product Wizard component to the CC Product record page, or any stand-alone Lightning page.
+
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
 
 ## History
 
