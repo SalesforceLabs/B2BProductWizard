@@ -1,0 +1,167 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProdDetail" controller="ckz_PIM_ProductDetailController"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+
+    <aura:attribute name="screen" type="String" default="ckz_PIM_ProdDetail" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:handler name="screenJump" event="c:ckz_PIM_JumpEvent"
+                  action="{!c.handleScreenJump}" />
+
+    <aura:attribute name="productDataMap" type="Object" default="{}" access="global"/>
+
+    <aura:attribute name="productAction" type="String" default="new" access="global"/>
+
+    <aura:attribute name="storefrontOptions" type="List" default="[]" access="global"/>
+
+    <aura:attribute name="recordId" type="String" access="global" />
+    <aura:attribute name="selectedStorefronts" type="List" access="global"/>
+    <aura:attribute name="name" type="String" default="{!v.productDataMap.productDetails.name}" />
+    <aura:attribute name="sku" type="String" default="{!v.productDataMap.productDetails.sku}" />
+    <aura:attribute name="shortDesc" type="String" default="{!v.productDataMap.productDetails.shortDesc}" />
+    <aura:attribute name="longDesc" type="String" default="{!v.productDataMap.productDetails.longDesc}" />
+    <aura:attribute name="status" type="String" default="{!v.productDataMap.productDetails.status}" />
+    <aura:attribute name="seoTitle" type="String" default="{!v.productDataMap.productDetails.seoTitle}" />
+
+    <aura:attribute name="productType" type="String" default="{!v.productDataMap.productDetails.productType}" />
+    <aura:attribute name="startDate" type="String" default="{!v.productDataMap.productDetails.startDate}" />
+    <aura:attribute name="endDate" type="String" default="{!v.productDataMap.productDetails.endDate}" />
+
+    <aura:attribute name="productTypeOptions" type="List" default="[
+        { 'label' : 'Coupon', 'value' : 'Coupon' },
+        { 'label' : 'Product', 'value' : 'Product' },
+        { 'label' : 'Plan', 'value' : 'Plan' },
+        { 'label' : 'PlanOptions', 'value' : 'PlanOptions' },
+        { 'label' : 'Accessories', 'value' : 'Accessories' },
+        { 'label' : 'Bundle', 'value' : 'Bundle' },
+        { 'label' : 'Kit', 'value' : 'Kit' },
+        { 'label' : 'Aggregated', 'value' : 'Aggregated' },
+        { 'label' : 'Assembly', 'value' : 'Assembly' },
+        { 'label' : 'Training', 'value' : 'Training' },
+        { 'label' : 'Configurable', 'value' : 'Configurable' },
+        { 'label' : 'Dynamic Kit', 'value' : 'Dynamic Kit' }
+    ]" access="global"/>
+
+    <aura:attribute name="pageMessages" type="List" default="[]"/>
+
+    <c:ckz_PIM_Header title="Details" icon="utility:new" productName="{!v.productDataMap.productDetails.name}" sku="{!v.productDataMap.productDetails.sku}" screen="{!v.screen}" />
+
+    <aura:if isTrue="{!(v.pageMessages.length > 0)}">
+        <div style="width: 50%;" class="slds-p-around_small">
+                <ul>
+                    <aura:iteration items="{!v.pageMessages}" var="msg">
+                        <li><c:ckz_PIM_MessageDisplay severity="{!msg.severity}" message="{!msg.message}"/></li>
+                    </aura:iteration>
+                </ul>
+
+
+        </div>
+    </aura:if>
+
+    <div aura:id="main" class="zaction-body slds-p-around_medium">
+
+        <div class="slds-p-vertical_x-small">
+            <lightning:checkboxGroup name="Checkbox Group"
+                                     label="Select Storefront(s)"
+                                     required="true"
+                                     options="{! v.storefrontOptions}"
+                                     value="{! v.selectedStorefronts}"
+                                     onchange="{! v.handleStorefrontChange}" />
+        </div>
+
+        <div class="slds-grid">
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small slds-p-right_x-small">
+                <lightning:input value="{!v.name}" label="Product Name" required='true' maxlength="80"/>
+            </div>
+
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small">
+                <lightning:input value="{!v.sku}" label="SKU" required='true' maxlength="100"/>
+            </div>
+        </div>
+
+        <div class="slds-p-vertical_x-small">
+            <lightning:select name="status" label="Product Status" value='{!v.status}' required="true">
+                <option value="">choose one...</option>
+                <option value="Blocked">Blocked</option>
+                <option value="Not Orderable">Not Orderable</option>
+                <option value="Released">Released </option>
+                <option value="In Creation">In Creation </option>
+            </lightning:select>
+        </div>
+
+        <div class="slds-p-vertical_x-small" >
+            <label class="slds-form-element__label" >Short Description</label>
+            <lightning:inputRichText value="{!v.shortDesc}" />
+        </div>
+
+        <div class="slds-p-vertical_x-small" >
+            <label class="slds-form-element__label">Long Description</label>
+            <lightning:inputRichText value="{!v.longDesc}" />
+        </div>
+
+        <div class="slds-grid">
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small slds-p-right_x-small">
+                <lightning:input value="{!v.seoTitle}" label="SEO Title" required='false'
+                                 maxlength="100" />
+            </div>
+
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small">
+                <lightning:select aura:id="selectProductType"
+                                  name="productType"
+                                  label="Product Type"
+                                  value="{!v.productType}"
+                                  required="true"
+                                   >
+                    <option value="">-- Select One</option>
+                    <aura:iteration items="{! v.productTypeOptions}" var="pt">
+                        <option text="{! pt.label}" value="{! pt.value}" selected="{! v.productType == pt.value}"></option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+
+        <div class="slds-grid">
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small slds-p-right_x-small">
+                <ui:inputDate aura:id="startDateField"
+                              displayDatePicker="true"
+                              format="MM/dd/yyyy"
+                              value="{! v.startDate}"
+                              class="field"
+                              label="Start Date"
+                              required="true"
+                />
+            </div>
+
+            <div class="slds-size_1-of-2 slds-p-vertical_x-small">
+                <ui:inputDate aura:id="endDateField" displayDatePicker="true" format="MM/dd/yyyy" value="{! v.endDate}" class="field"
+                label="End Date" required="true"/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="action-footer slds-p-bottom_small slds-p-right_small">
+        <div class="slds-grid">
+            <div class="slds-col" />
+            <div class="slds-col slds-size_1-of-10">
+                <lightning:button aura:id="doNext"
+                                  label="Next"
+                                  class="slds-m-top-medium"
+                                  variant="neutral"
+                                  onclick="{!c.handleNavigateNext}" />
+            </div>
+
+        </div>
+    </div>
+
+</aura:component>

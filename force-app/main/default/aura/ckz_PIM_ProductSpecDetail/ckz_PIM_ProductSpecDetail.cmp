@@ -1,0 +1,76 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductSpecDetail"
+                access="global">
+
+    <aura:attribute name="productSpecEntry" default="{}" type="Map" required="true" access="global"/>
+
+    <aura:attribute name="sfid" type="String" default="{!v.productSpecEntry.sfid}" />
+    <aura:attribute name="specName" type="String" default="{!v.productSpecEntry.specName}" />
+    <aura:attribute name="specId" type="String" default="{!v.productSpecEntry.specId}" />
+    <aura:attribute name="productSpecValue" type="String" default="{!v.productSpecEntry.productSpecValue}" />
+
+    <aura:attribute Name="selItem" type="object" access="public" />
+
+    <aura:handler name="change" value="{!v.selItem}" action="{!c.selectionChange}"/>
+
+    <aura:attribute name="isNewSpecOpen" type="Boolean" default="false" />
+    <aura:handler name="newSpecDialogEvent" event="c:ckz_PIM_NewSpecDialogEvent" action="{!c.handleNewSpec}" />
+
+    <tr>
+        <!-- Spec (lookup)  -->
+        <td>
+            <div class="slds-grid">
+
+                <div class="slds-col slds-p-right_x-small">
+                    <c:ckz_PIM_Lookup objectName="ccrz__E_Spec__c"
+                              field_API_text="Name"
+                              field_API_val="Id"
+                              limit="250"
+                              field_API_search="Name"
+                              lookupIcon="utility:assignment"
+                              selItem="{!v.selItem}"
+                              placeholder="Search" />
+                </div>
+
+                <div class="slds-col slds-p-right_small">
+                    <lightning:buttonIcon aura:id="showDialog"
+                                          iconName="utility:add"
+                                      variant="neutral"
+                                      alternativeText="Create" 
+                                      onclick="{!c.openModel}" />
+
+                    <c:ckz_PIM_NewSpecDialog isOpen="{!v.isNewSpecOpen}" />
+                </div>
+            </div>
+
+        </td>
+
+        <td>
+            {!v.specName}
+        </td>
+
+        <td class="noLabel">
+            <lightning:input name="specValue"
+                             aura:id="productSpecValue"
+                             maxlength="255"
+                             value="{!v.productSpecValue}" />
+        </td>
+
+        <!-- Actions -->
+        <td class="noLabel">
+
+            <lightning:button aura:id="clearProduct"
+                              label="Clear"
+                              variant="brand"
+                              onclick="{!c.clearFields}"
+                              class="slds-button_gray"/>
+
+        </td>
+    </tr>
+
+</aura:component>

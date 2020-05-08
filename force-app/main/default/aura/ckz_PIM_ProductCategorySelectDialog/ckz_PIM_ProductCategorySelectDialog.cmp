@@ -1,0 +1,104 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductCategorySelectDialog" controller="ckz_PIM_CategoryTree">
+
+    <aura:attribute name="storefrontOptions" type="List" default="[]" access="global"/>
+
+    <aura:attribute name="selectedStorefront" type="String" access="global"/>
+    <aura:attribute name="storefrontCategoryTree" type="Object" access="global" />
+
+    <aura:attribute name="categoryId" type="String" />
+    <aura:attribute name="categoryName" type="String" />
+
+    <aura:registerEvent name="productCategoryDialogEvent" type="c:ckz_PIM_CategorySelectDialogEvent"/>
+
+    <aura:handler event="aura:waiting" action="{!c.waiting}" phase="capture"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.doneWaiting}" phase="capture"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+
+    <!--use boolean attribute for Store true/false value,
+    make default to "false" so modal box are not display on the load of component.
+    -->
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+
+    <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->
+    <aura:if isTrue="{!v.isOpen}">
+
+    <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component-->
+        <div style="height: 200px;">
+            <div class="slds-m-around_xx-large">
+                <!--###### MODAL BOX Start######-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+
+                    <div class="slds-modal__container slds-p-around_medium" style="background-color: #fff;">
+                        
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                onclick="{! c.closeModel }"
+                                                alternativeText="close"
+                                                variant="bare-inverse"
+                                                class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select Category</h2>
+                        </header>
+
+                        <!--###### MODAL BOX BODY Part Start######-->
+
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                            <aura:renderIf isTrue="{!v.showSpinner}">
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--large" role="alert">
+                                    <span class="slds-assistive-text">Loading, Please Wait...</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </aura:renderIf>
+
+                            <lightning:select aura:id="selectStorefront"
+                                            name="selectStorefront"
+                                            label="Select a Storefront"
+                                            onchange="{! c.handleStorefrontChange}"
+                                            required="false">
+                                <option value="">-- Select One--</option>
+                                <aura:iteration items="{!v.storefrontOptions}" var="storefront">
+                                    <option text="{!storefront}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+
+                            <div style="overflow: scroll;">
+                                <lightning:tree items="{! v.storefrontCategoryTree}" onselect="{! c.selectionChange}" />
+                            </div>
+
+                            <aura:renderIf isTrue="{!v.categoryName != null}">
+                                <p>Selected Category: {!v.categoryName}</p>
+                            </aura:renderIf>
+
+                        </div>
+
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral"
+                                            label="Cancel"
+                                            title="Cancel"
+                                            onclick="{! c.closeModel }"/>
+                            <lightning:button variant="brand"
+                                            label="Save"
+                                            title="Save"
+                                            onclick="{! c.closeAndFinish }"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+            </div>
+
+        </div>
+
+    </aura:if>
+
+</aura:component>

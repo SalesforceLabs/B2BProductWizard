@@ -1,0 +1,10 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:event type="COMPONENT" description="ckz_PIM_NewSpecDialogEvent">
+    <aura:attribute name="specId" type="String" required="true" />
+    <aura:attribute name="specName" type="String" required="true" />
+</aura:event>

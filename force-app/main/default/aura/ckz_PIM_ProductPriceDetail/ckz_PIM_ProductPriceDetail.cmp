@@ -1,0 +1,82 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductPriceDetail"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:attribute name="priceListEntry" default="{}" type="Map" required="true" access="global"/>
+    <aura:attribute name="priceListOptions" type="List" default="[]" required="true"/>
+
+    <aura:attribute name="sfid" type="String" default="{!v.priceListEntry.sfid}" />
+    <aura:attribute name="priceList" type="String" default="{!v.priceListEntry.priceList}" />
+    <aura:attribute name="price" type="Double" default="{!v.priceListEntry.price}" />
+    <aura:attribute name="startDate" type="String" default="{!v.priceListEntry.startDate}" />
+    <aura:attribute name="endDate" type="String" default="{!v.priceListEntry.endDate}" />
+
+    <!-- For debugging purposes -->
+    <aura:attribute name="selectedPriceList" type="String" access="global"/>
+
+    <tr>
+        <!-- Price List (select one)-->
+        <td class="noLabel">
+            <lightning:select aura:id="selectPriceList"
+                    name="selectPriceList"
+                    value="{!v.priceList}"
+                    required="false"
+                              onchange="{! c.handlePriceListChange}" >
+                <option value="">-- Select One</option>
+                <aura:iteration items="{! v.priceListOptions}" var="pl">
+                    <!--  selected="{! v.priceList == pl.value}" -->
+                    <option text="{! pl.label}" value="{! pl.value}" selected="{! v.priceList == pl.value}"></option>
+                </aura:iteration>
+            </lightning:select>
+        </td>
+
+        <!-- Price (Double)-->
+        <td class="noLabel">
+            <lightning:input aura:id="productPrice"
+                             name="price"
+                             type="number"
+                             formatter="currency"
+                             step="0.01"
+                             value="{!v.price}"
+                             required="false"
+                             messageWhenRangeUnderflow="Enter a price that is least 0.01"
+                             />
+        </td>
+
+        <!-- Start Date -->
+        <td>
+            <ui:inputDate aura:id="startDateField"
+                          displayDatePicker="true"
+                          format="MM/dd/yyyy"
+                          value="{! v.startDate}"
+                          class="field"
+                        />
+        </td>
+
+        <!-- End Date -->
+        <td>
+            <ui:inputDate aura:id="endDateField" displayDatePicker="true" format="MM/dd/yyyy" value="{! v.endDate}" class="field" />
+        </td>
+
+        <!-- Actions -->
+        <td class="noLabel">
+            
+            <lightning:button aura:id="clearRow"
+                                label="Clear"
+                                variant="brand"
+                                onclick="{!c.clearFields}"
+                                  class="slds-button_gray" />
+            
+        </td>
+    </tr>
+
+</aura:component>

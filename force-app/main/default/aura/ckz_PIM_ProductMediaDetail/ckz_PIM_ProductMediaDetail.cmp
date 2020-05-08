@@ -1,0 +1,183 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductMediaDetail"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:attribute name="productMediaEntry" default="{}" type="Map" required="true" access="global"/>
+    <aura:attribute name="showHideExtraFields" default="false" type="Boolean" required="true" access="global"/>
+
+    <aura:attribute name="mediaTypeOptions" type="List" default="[
+        { 'label' : 'Alternate Images', 'value' : 'Alternate Images' },
+        { 'label' : 'Alternate Thumbnails', 'value' : 'Alternate Thumbnails' },
+        { 'label' : 'Assembly Guides', 'value' : 'Assembly Guides' },
+        { 'label' : 'Datasheets', 'value' : 'Datasheets' },
+        { 'label' : 'Flash Files', 'value' : 'Flash Files' },
+        { 'label' : 'JPG Image', 'value' : 'JPG Image' },
+        { 'label' : 'Media', 'value' : 'Media' },
+        { 'label' : 'Owner\'s Manuals', 'value' : 'Owner\'s Manuals' },
+        { 'label' : 'Product Image', 'value' : 'Product Image' },
+        { 'label' : 'Product Image Thumbnail', 'value' : 'Product Image Thumbnail' },
+        { 'label' : 'Product Search Image', 'value' : 'Product Search Image' },
+        { 'label' : 'Safety Documents', 'value' : 'Safety Documents' },
+        { 'label' : 'Sales Brochures', 'value' : 'Sales Brochures' },
+        { 'label' : 'SVG Interactive Diagram', 'value' : 'SVG Interactive Diagram' }
+    ]" access="global"/>
+
+    <aura:attribute name="mediaSourceOptions" type="List" default="[
+        { 'label' : 'Attachment', 'value' : 'Attachment' },
+        { 'label' : 'Static Resource', 'value' : 'Static Resource' },
+        { 'label' : 'URI', 'value' : 'URI' }
+    ]" access="global"/>
+
+    <aura:attribute name="sfid" type="String" default="{!v.productMediaEntry.sfid}" />
+    <aura:attribute name="enabled" type="Boolean" default="{!v.productMediaEntry.enabled}" />
+    <aura:attribute name="mediaType" type="String" default="{!v.productMediaEntry.mediaType}" />
+    <aura:attribute name="mediaSource" type="String" default="{!v.productMediaEntry.mediaSource}" />
+    <aura:attribute name="sequence" type="Integer" default="{!v.productMediaEntry.sequence}" />
+    <aura:attribute name="startDate" type="String" default="{!v.productMediaEntry.startDate}" />
+    <aura:attribute name="endDate" type="String" default="{!v.productMediaEntry.endDate}" />
+    <aura:attribute name="locale" type="String" default="{!v.productMediaEntry.locale}" />
+
+    <aura:attribute name="uri" type="String" default="{!v.productMediaEntry.uri}" />
+
+    <aura:attribute name="staticResourceName" type="String" default="{!v.productMediaEntry.staticResourceName}" />
+    <aura:attribute name="filePath" type="String" default="{!v.productMediaEntry.filePath}" />
+
+    <tr>
+        <!-- Enabled -->
+        <td style="text-align: center;">
+            <lightning:input type="checkbox" aura:id="enableItem" label="Enabled"
+                             name="enableItem"
+                             value="{!v.enabled}"
+                             checked="{!v.enabled}"
+                             variant="label-hidden"
+                             />
+        </td>
+
+        <!-- Media Type (select one)-->
+        <!-- v.mediaType != null &amp;&amp;  -->
+        <td class="noLabel">
+            <lightning:select aura:id="selectMediaType"
+                              name="mediaType"
+                              value="{!v.mediaType}"
+                              required="false"
+                              onchange="{! c.handleMediaTypeChange}" >
+                <option value="">-- Select One</option>
+                <aura:iteration items="{! v.mediaTypeOptions}" var="mt">
+                    <option text="{! mt.label}" value="{! mt.value}" selected="{! v.mediaType == mt.value}"></option>
+                </aura:iteration>
+            </lightning:select>
+        </td>
+
+        <!-- Media Source (select one)-->
+        <!-- v.mediaSource != null &amp;&amp;  -->
+        <td class="noLabel">
+            <aura:renderIf isTrue="{!v.mediaType != null}">
+                <lightning:select aura:id="selectMediaSource"
+                                  name="mediaSource"
+                                  value="{!v.mediaSource}"
+                                  required="false"
+                                  onchange="{! c.handleMediaSourceChange}" >
+                    <option value="">-- Select One</option>
+                    <aura:iteration items="{! v.mediaSourceOptions}" var="ms">
+                        <option text="{! ms.label}" value="{! ms.value}" selected="{! v.mediaSource == ms.value}"></option>
+                    </aura:iteration>
+                </lightning:select>
+            </aura:renderIf>
+        </td>
+
+        <!-- Path -->
+        <td>
+
+            <aura:renderIf isTrue="{!v.mediaSource == 'URI'}">
+                <div class="slds-p-bottom_large">
+                <lightning:input name="URI"
+                                 aura:id="mediaURI"
+                                 label="URI"
+                                 value="{!v.uri}"
+                                 maxlength="255" />
+                </div>
+            </aura:renderIf>
+
+            <aura:renderIf isTrue="{!v.mediaSource == 'Static Resource'}">
+                <lightning:input name="filePath"
+                                 aura:id="mediaFilePath"
+                                 label="File Path"
+                                 value="{!v.filePath}"
+                                 maxlength="128"
+                />
+
+                <div class="slds-p-bottom_large">
+
+                    <label class="slds-form-element__label">Static Resource Name</label>
+
+                    <lightning:helptext content="1. Use prefix &quot;c__&quot; for static resource defined in subscriber org
+                    2. StaticResource name without prefix refers to static resource inside managed package" />
+                    <lightning:input name="staticResourceName"
+                                    aura:id="mediaStaticResourceName"
+                                    label="Static Resource Name"
+                                    value="{!v.staticResourceName}"
+                                    maxlength="255" 
+                                    variant="label-hidden" />
+
+                </div>
+
+            </aura:renderIf>
+        </td>
+
+        <aura:renderIf isTrue="{!v.showHideExtraFields == true}">
+        <!-- Sequence (Integer)-->
+        <td class="noLabel">
+            <lightning:input aura:id="mediaSequence"
+                             name="sequence"
+                             type="number"
+                             step="1"
+                             value="{!v.sequence}"
+                             required="false"
+                             messageWhenRangeUnderflow="Enter a sequence that is least 1"
+            />
+        </td>
+
+        <!-- Start Date -->
+        <td>
+            <ui:inputDate aura:id="startDateField"
+                          displayDatePicker="true"
+                          format="MM/dd/yyyy"
+                          value="{! v.startDate}"
+                          class="field"
+            />
+        </td>
+
+        <!-- End Date -->
+        <td>
+            <ui:inputDate aura:id="endDateField" displayDatePicker="true" format="MM/dd/yyyy" value="{! v.endDate}" class="field" />
+        </td>
+
+        <!-- Locale -->
+        <td class="noLabel" style="display: hidden;">
+            <lightning:input name="productLocale"
+                             aura:id="productLocale"
+                             value="{!v.locale}" />
+        </td>
+
+        </aura:renderIf>
+
+        <!-- Actions -->
+        <td class="noLabel">
+            
+                <lightning:button aura:id="clearRow"
+                                  label="Clear"
+                                  variant="brand"
+                                  onclick="{!c.clearFields}"
+                                  class="slds-button_gray"/>
+            
+        </td>
+    </tr>
+
+</aura:component>

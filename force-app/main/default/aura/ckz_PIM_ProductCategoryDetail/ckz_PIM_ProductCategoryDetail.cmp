@@ -1,0 +1,92 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductCategoryDetail"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:attribute name="productCategoryEntry" default="{}" type="Map" required="true" access="global"/>
+    <aura:attribute name="showHideExtraFields" default="false" type="Boolean" required="true" access="global"/>
+
+    <aura:attribute name="sfid" type="String" default="{!v.productCategoryEntry.sfid}" />
+    <aura:attribute name="categoryId" type="String" default="{!v.productCategoryEntry.categoryId}" />
+    <aura:attribute name="categoryName" type="String" default="{!v.productCategoryEntry.categoryName}" />
+    <aura:attribute name="startDate" type="String" default="{!v.productCategoryEntry.startDate}" />
+    <aura:attribute name="endDate" type="String" default="{!v.productCategoryEntry.endDate}" />
+    <aura:attribute name="sequence" type="Integer" default="{!v.productCategoryEntry.sequence}" />
+
+    <!-- New category tree selection -->
+    <aura:attribute name="storefrontOptions" type="List" default="[]" access="global"/>
+
+    <aura:attribute name="isOpen" type="Boolean" default="false" />
+
+    <aura:handler name="productCategoryDialogEvent" event="c:ckz_PIM_CategorySelectDialogEvent"
+                  action="{!c.selectionChange}" />
+
+    <tr>
+        <!-- Category (lookup)  -->
+        <td>
+
+            <aura:renderIf isTrue="{!v.sfid == null}">
+
+                <lightning:button aura:id="showDialog"
+                                label="Select"
+                                variant="brand"
+                                onclick="{!c.openModel}" />
+
+                <c:ckz_PIM_ProductCategorySelectDialog isOpen="{!v.isOpen}"
+                    storefrontOptions="{!v.storefrontOptions}"
+                    categoryId="{#v.categoryId}"
+                    categoryName="{#v.categoryName}" />
+
+            </aura:renderIf>
+{!v.categoryName}
+        </td>
+
+
+        <aura:renderIf isTrue="{!v.showHideExtraFields == true}">
+            <!-- Start Date -->
+            <td>
+                <ui:inputDate aura:id="startDateField"
+                            displayDatePicker="true"
+                            format="MM/dd/yyyy"
+                            value="{! v.startDate}"
+                            class="field"
+                />
+            </td>
+
+            <!-- End Date -->
+            <td>
+                <ui:inputDate aura:id="endDateField" displayDatePicker="true" format="MM/dd/yyyy" value="{! v.endDate}" class="field" />
+            </td>
+
+            <!-- Sequence (Integer)-->
+            <td class="noLabel">
+                <lightning:input aura:id="categorySequence"
+                                name="sequence"
+                                type="number"
+                                step="1"
+                                value="{!v.sequence}"
+                                required="false"
+                                messageWhenRangeUnderflow="Enter a sequence that is least 1"
+                />
+            </td>
+        </aura:renderIf>
+
+        <!-- Actions -->
+        <td>
+            
+            <lightning:button aura:id="clearProduct"
+                                label="Clear"
+                                variant="brand"
+                                onclick="{!c.clearFields}"
+                                  class="slds-button_gray" />
+            
+        </td>
+    </tr>
+
+</aura:component>

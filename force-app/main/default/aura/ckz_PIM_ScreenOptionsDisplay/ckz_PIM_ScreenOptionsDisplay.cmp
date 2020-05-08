@@ -1,0 +1,28 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ScreenOptionsDisplay">
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" afterScriptsLoaded="{!c.loadScreenOptions}"/>
+
+    <aura:registerEvent name="screenJump" type="c:ckz_PIM_JumpEvent" />
+
+    <aura:attribute name="screenOptions" type="List" />
+    <aura:attribute name="lastScreenOption" type="String" />
+    <aura:attribute name="screen" type="String" />
+
+    <div class="slds-p-around_medium">
+        <lightning:progressIndicator currentStep="{! v.screen}" type="path" variant="shaded">
+            <aura:iteration items="{!v.screenOptions}" var="step">
+
+                <lightning:progressStep label="{! step.label}" value="{!step.value}" onclick="{! c.goToScreen}" />
+            </aura:iteration>
+        </lightning:progressIndicator>
+    </div>
+
+</aura:component>

@@ -1,0 +1,149 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductChooser"
+controller="ckz_PIM_MainController"
+access="global">
+
+<lightning:workspaceAPI aura:id="workspace" />
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+<aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+
+<aura:attribute name="screen" type="String" />
+
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+<aura:attribute name="productDataMap" type="Object" default="{}" access="global"/>
+
+<aura:attribute name="recordId" type="String" access="global"/>
+
+<aura:attribute name="isProduct" type="Boolean" default="false" />
+
+<!-- for the typeahead -->
+<aura:attribute Name="selItem" type="object" access="public" />
+<aura:handler name="change" value="{!v.selItem}" action="{!c.selectionChange}"/>
+<aura:attribute name="productName" type="String" />
+<aura:attribute name="sku" type="String" />
+<aura:attribute name="selectedProductId" type="String" />
+
+<aura:attribute name="pageMessages" type="List" default="[]"/>
+
+    <div style="width: 50%;">
+
+        <aura:if isTrue="{!(v.pageMessages.length > 0)}">
+            <ul>
+                <aura:iteration items="{!v.pageMessages}" var="msg">
+                    <li><c:ckz_PIM_MessageDisplay severity="{!msg.severity}" message="{!msg.message}"/></li>
+                </aura:iteration>
+            </ul>
+        </aura:if>
+
+    </div>
+
+        
+        <div class="zrow">
+            
+            <!-- slds-grid slds-gutters -->
+            <div class="slds-grid" style="background-color: white; padding: 10px;">
+
+                <div class="slds-col slds-p-around_medium">
+                        
+                    <article class="">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">Product Search</h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <c:ckz_PIM_ProductLookup selItem="{!v.selItem}" />
+                        </div>
+                    </article>
+
+
+
+
+                    <div class="action-footer slds-p-vertical_x-small">
+                        <div class="slds-grid  slds-p-bottom_small slds-p-right_small slds-p-left_small">
+
+                            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                                <aura:if isTrue="{! empty(v.selItem) == false }">
+
+                                    <lightning:button aura:id="doNext"
+                                                      label="Edit this Product"
+                                                      class="slds-m-top-medium"
+                                                      variant="neutral"
+                                                      onclick="{!c.handleEditSelectedProduct}" />
+
+                                </aura:if>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-10">
+                                <aura:if isTrue="{! empty(v.selItem) == false }">
+
+                                    <lightning:button aura:id="doClone"
+                                                      label="Clone this Product"
+                                                      class="slds-m-top-medium"
+                                                      variant="neutral"
+                                                      onclick="{!c.handleCloneSelectedProduct}" />
+
+                                </aura:if>
+                            </div>
+
+                            <div class="slds-col" />
+
+
+
+                            <aura:if isTrue="{!v.isProduct}">
+                                <div class="slds-col slds-col slds-size_1-of-10 slds-p-right_small">
+
+                                    <lightning:button aura:id="doEdit"
+                                                      label="Edit Current Product"
+                                                      class="slds-m-top-medium"
+                                                      variant="neutral"
+                                                      onclick="{!c.handleEditProduct}" />
+
+                                </div>
+                            </aura:if>
+
+                            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                                <aura:if isTrue="{!v.isProduct}">
+                                    <lightning:button aura:id="doClone"
+                                                      label="Clone Current Product"
+                                                      class="slds-m-top-medium"
+                                                      variant="neutral"
+                                                      onclick="{!c.handleCloneProduct}" />
+                                </aura:if>
+                            </div>
+
+                            <div class="slds-col slds-col slds-size_1-of-10">
+                                <lightning:button aura:id="doNew"
+                                                  label="New Product"
+                                                  class="slds-m-top-medium"
+                                                  variant="brand"
+                                                  onclick="{!c.handleNewProduct}"
+                                  iconName="utility:add" 
+                                  iconPosition="left" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+        
+                </div>
+        
+            </div>
+            
+
+                
+        </div>
+
+
+</aura:component>

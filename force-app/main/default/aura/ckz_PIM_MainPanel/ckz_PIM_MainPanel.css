@@ -1,0 +1,70 @@
+/*
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+.THIS.slds-spinner_container {
+    z-index: 1000;
+    position: fixed;
+}
+.THIS {
+    position: relative;
+    /*height: 560px;*/  /* 2019-01-15 msobczak */
+    padding: 0 0.25rem;
+    background-color: white;
+}
+.THIS .action-body {
+    display:flex;
+	flex-flow: row wrap;
+    align-content: flex-start;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% - 50px);
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.THIS .action-footer {
+    width: 100%;
+    /* 2019-01-16  msobczak: added */
+    overflow:hidden;
+}
+.THIS .row {
+    width: 100%;
+    /*display:flex;*/
+    /*flex: 0 0 100%;*/
+    flex-flow: row wrap;
+    margin: 0.5rem 0;
+}
+
+.THIS > .row {
+    padding: 0.5rem;
+}
+
+.THIS .row .slds-form-element, .THIS .row > lightning-input, .THIS .row > lightning-input .slds-form-element{
+    width: 100%;
+}
+
+.THIS .row > .column_1-of-2 {
+    width: calc(50% - 0.5rem);
+}
+
+.THIS .row > .column_1-of-2 + .column_1-of-2{
+    margin-left: 1rem;
+}
+
+.THIS .row[class*="border"] .column {
+    margin: 0.5rem;
+}
+
+.THIS .column .row {
+    margin: -0.5rem 0;
+}
+.THIS td.noLabel label {
+    display: none;
+}
+.THIS div.spacingBottom {
+    margin-bottom: 10px;
+}

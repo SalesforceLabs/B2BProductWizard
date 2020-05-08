@@ -1,0 +1,47 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_Header" access="global">
+
+    <aura:attribute name="productName" type="String" default="" />
+    <aura:attribute name="sku" type="String" />
+    <aura:attribute name="title" type="String" required="true" default="New Product"/>
+    <aura:attribute name="icon" type="String" required="true" default="utility:screen"/>
+    <aura:attribute name="screen" type="String" />
+
+    <div class="spacingBottom">
+    <lightning:layout class="slds-page-header slds-page-header_object-home slds-p-around_medium slds-grid_vertical-align-center">
+
+        <lightning:layoutItem size="1" class="slds-p-around_medium">
+            <div><lightning:icon iconName="{!v.icon}" alternativeText="{v.title}"/></div>
+        </lightning:layoutItem>
+
+        <!-- padding="horizontal-small" -->
+        <lightning:layoutItem size="9">
+            <div class="page-section page-header">
+                <h1 class="slds-text-heading_medium">{!v.title}</h1>
+            </div>
+            
+            <aura:renderIf isTrue="{!v.productName != null &amp;&amp; v.productName != ''}">
+                <div class="page-section page-header">
+                    <h1 class="slds-text-heading_small">{!v.productName} | {!v.sku}</h1>
+                </div>
+            </aura:renderIf>
+
+            
+
+        </lightning:layoutItem>
+
+        <lightning:layoutItem size="2">
+            <c:ckz_PIM_Jump screen="{!v.screen}" />
+        </lightning:layoutItem>
+
+    </lightning:layout>
+    </div>
+
+    <c:ckz_PIM_ScreenOptionsDisplay screen="{!v.screen}"></c:ckz_PIM_ScreenOptionsDisplay>
+
+</aura:component>

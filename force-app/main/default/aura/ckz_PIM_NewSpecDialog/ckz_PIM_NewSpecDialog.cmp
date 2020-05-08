@@ -1,0 +1,163 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_NewSpecDialog">
+
+    <aura:registerEvent name="newSpecDialogEvent" type="c:ckz_PIM_NewSpecDialogEvent"/>
+
+    <aura:attribute name="sObjectName" type="String" default="ccrz__E_Spec__c" />
+
+    <aura:attribute name="recordId" type="String"/>
+
+    <aura:attribute name="specId" type="String" access="private" />
+    <aura:attribute name="specName" type="String" access="private" />
+
+    <aura:attribute name="saved" type="Boolean" default="false" access="private" />
+
+    <!--use boolean attribute for Store true/false value,
+    make default to "false" so modal box are not display on the load of component.
+    -->
+    <aura:attribute name="isOpen" type="boolean" default="false" access="public"/>
+
+    <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->
+    <aura:if isTrue="{!v.isOpen}">
+
+        <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component-->
+        <div style="height: 200px;">
+            <div class="slds-m-around_xx-large">
+                <!--###### MODAL BOX Start######-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container" style="background-color: #fff; ">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create a Spec</h2>
+                        </header>
+                        <!--###### MODAL BOX BODY Part Start######-->
+
+
+                            <div class="slds-p-left_large slds-p-right_medium">
+                                <!--
+                                <lightning:recordForm aura:id="recordViewForm"
+                                                      recordId="{!v.recordId}"
+                                                      objectApiName="{!v.sObjectName}"
+                                                      columns="2"
+                                                      fields="Name,ccrz.Locale__c,ccrz.SelectType__c,ccrz.SpecGroup__c,ccrz.FilterType__c,ccrz.Sequence__c,ccrz.IsVisibleInCatalog__c,ccrz.IsComparable__c,ccrz.UseForFilter__c"
+                                                      layoutType ="Full"
+                                                      mode="edit"
+                                                      onsuccess="{!c.onSuccess}"
+                                                      onsubmit="{!c.onSubmit}"
+                                                      onerror="{!c.onError}"
+                                />
+                                -->
+
+                                <lightning:recordEditForm
+                                        aura:id="recordEditForm"
+                                        onsubmit="{!c.onSubmit}"
+                                        onsuccess="{!c.onSuccess}"
+                                        onload="{!c.onLoad}"
+                                        recordId="{!v.recordId}"
+                                        objectApiName="{!v.sObjectName}" density="comfy" class="newSpecForm">
+                                    <!-- the messages component is for error messages -->
+                                    <lightning:messages />
+
+                                        <lightning:inputField fieldName="Name" />
+
+                                    <div class="slds-grid">
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <lightning:inputField fieldName="ccrz__Locale__c" value="en_US"/>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <lightning:inputField fieldName="ccrz__Sequence__c" value="500" />
+                                        </div>
+                                    </div>
+
+                                    <div class="slds-grid">
+                                        <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="ccrz__SelectType__c" value="Single"/>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="ccrz__SpecGroup__c" value="General"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="slds-grid">
+                                        <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="ccrz__FilterType__c" />
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2"/>
+                                    </div>
+
+                                    <div class="slds-grid">
+                                        <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="ccrz__IsVisibleInCatalog__c"  />
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                        <lightning:inputField fieldName="ccrz__IsComparable__c" aura:id="isComparable" />
+                                        </div>
+                                    </div>
+
+                                    <div class="slds-grid">
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <lightning:inputField fieldName="ccrz__UseForFilter__c" />
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Save" />
+                                        </div>
+                                    </div>
+
+                                </lightning:recordEditForm>
+
+                            </div>
+
+
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+
+
+                        <footer class="slds-modal__footer">
+                            <div class="slds-grid">
+
+                                <div class="slds-col" />
+
+                                <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                                    <lightning:button variant="neutral"
+                                                      label="Close Dialog"
+                                                      title="Close Dialog"
+                                                      onclick="{! c.closeModel }"/>
+
+                                </div>
+
+                                <aura:if isTrue="{!v.recordId != null &amp;&amp; v.recordId != ''}">
+                                    <div class="slds-col slds-size_1-of-10">
+                                        <lightning:button variant="brand"
+                                                          label="Use Spec"
+                                                          title="Use Spec"
+                                                          onclick="{! c.closeAndFinish }"/>
+                                    </div>
+                                </aura:if>
+
+                            </div>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+            </div>
+
+        </div>
+
+    </aura:if>
+
+</aura:component>

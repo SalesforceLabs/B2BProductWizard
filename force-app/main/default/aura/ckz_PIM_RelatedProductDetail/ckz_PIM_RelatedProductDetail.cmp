@@ -1,0 +1,137 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_RelatedProductDetail"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:attribute name="relatedProductEntry" default="{}" type="Map" required="true" access="global"/>
+    <aura:attribute name="showHideExtraFields" default="false" type="Boolean" required="true" access="global"/>
+
+    <aura:attribute name="productTypeOptions" type="List" default="[
+        { 'label' : 'Competitive', 'value' : 'Competitive' },
+        { 'label' : 'Related', 'value' : 'Related' },
+        { 'label' : 'RequiredItem', 'value' : 'RequiredItem' },
+        { 'label' : 'CrossSell', 'value' : 'CrossSell' },
+        { 'label' : 'UpSell', 'value' : 'UpSell' },
+        { 'label' : 'Complementary', 'value' : 'Complementary' },
+        { 'label' : 'Accessories', 'value' : 'Accessories' },
+        { 'label' : 'Superseded', 'value' : 'Superseded' }
+    ]" access="global"/>
+
+    <aura:attribute name="sfid" type="String" default="{!v.relatedProductEntry.sfid}" />
+    <aura:attribute name="enabled" type="Boolean" default="{!v.relatedProductEntry.enabled}" />
+    <aura:attribute name="productType" type="String" default="{!v.relatedProductEntry.productType}" />
+    <aura:attribute name="relatedProductId" type="String" default="{!v.relatedProductEntry.relatedProductId}" />
+    <aura:attribute name="relatedProductName" type="String" default="{!v.relatedProductEntry.relatedProductName}" />
+    <aura:attribute name="relatedProductSku" type="String" default="{!v.relatedProductEntry.relatedProductSku}" />
+    <aura:attribute name="sequence" type="Integer" default="{!v.relatedProductEntry.sequence}" />
+    <aura:attribute name="startDate" type="String" default="{!v.relatedProductEntry.startDate}" />
+    <aura:attribute name="endDate" type="String" default="{!v.relatedProductEntry.endDate}" />
+
+    <aura:attribute name="hasBackRef" type="String" default="{!v.relatedProductEntry.hasBackRef}" />
+    <aura:attribute name="backRefRelProdId" type="String" default="{!v.relatedProductEntry.backRefRelProdId}" />
+
+    <!-- for the typeahead -->
+    <aura:attribute Name="selItem" type="object" access="public" />
+    <aura:handler name="change" value="{!v.selItem}" action="{!c.selectionChange}"/>
+    <aura:attribute name="productName" type="String" />
+    <aura:attribute name="sku" type="String" />
+    <aura:attribute name="selectedProductId" type="String" />
+
+    <tr>
+        <!-- Enabled -->
+        <td style="text-align: center;">
+            <lightning:input type="checkbox" aura:id="enableItem" label="Enabled"
+                             name="enableItem"
+                             value="{!v.enabled}"
+                             checked="{!v.enabled}"
+                             variant="label-hidden"
+            />
+        </td>
+
+        <!-- Product Type (select one)-->
+        <td class="noLabel">
+            <lightning:select aura:id="selectProductType"
+                              name="productType"
+                              value="{!v.productType}"
+                              required="false"
+                              >
+                <option value="">-- Select One</option>
+                <aura:iteration items="{! v.productTypeOptions}" var="mt">
+                    <option text="{! mt.label}" value="{! mt.value}" selected="{! v.productType == mt.value}"></option>
+                </aura:iteration>
+            </lightning:select>
+
+        </td>
+
+        <!-- Related Product (lookup)-->
+        <td>
+
+            <c:ckz_PIM_ProductLookup selItem="{!v.selItem}" />
+                                
+            <aura:if isTrue="{! v.relatedProductName != null }">
+
+                <p>{!v.relatedProductSku} - {!v.relatedProductName}</p>
+                
+            </aura:if>
+            
+        </td>
+
+        <aura:renderIf isTrue="{!v.showHideExtraFields == true}">
+            <!-- Sequence (Integer)-->
+            <td class="noLabel">
+                <lightning:input aura:id="productSequence"
+                                 name="sequence"
+                                 type="number"
+                                 step="1"
+                                 value="{!v.sequence}"
+                                 required="false"
+                                 messageWhenRangeUnderflow="Enter a sequence that is least 1"
+                />
+            </td>
+
+            <!-- Start Date -->
+            <td>
+                <ui:inputDate aura:id="startDateField"
+                              displayDatePicker="true"
+                              format="MM/dd/yyyy"
+                              value="{! v.startDate}"
+                              class="field"
+                />
+            </td>
+
+            <!-- End Date -->
+            <td>
+                <ui:inputDate aura:id="endDateField" displayDatePicker="true" format="MM/dd/yyyy" value="{! v.endDate}" class="field" />
+            </td>
+
+        </aura:renderIf>
+
+        <!-- Has Back Reference -->
+        <td style="text-align: center;">
+            <lightning:input type="checkbox" aura:id="enableItem" label="Has Back Reference"
+                             name="enableItem"
+                             value="{!v.hasBackRef}"
+                             checked="{!v.hasBackRef}"
+                             variant="label-hidden"
+                             />
+        </td>
+
+        <!-- Actions -->
+        <td class="noLabel">
+            
+            <lightning:button aura:id="clearProduct"
+                                label="Clear"
+                                variant="brand"
+                                onclick="{!c.clearFields}"
+                                class="slds-button_gray" />
+            
+        </td>
+    </tr>
+
+</aura:component>

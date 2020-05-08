@@ -1,0 +1,63 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_MainPanel"
+                implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:availableForFlowScreens,force:lightningQuickActionWithoutHeader,force:hasRecordId"
+                controller="ckz_PIM_MainController"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+    <aura:handler name="renderPanel" action="{!c.renderPanel}" />
+
+    <aura:registerEvent name="reset" type="c:ckz_PIM_Reset" />
+    <aura:handler name="reset" action="{!c.resetPanel}" />
+    
+    <aura:attribute name="recordId" type="String" access="global"/>
+    <aura:attribute name="isProduct" type="Boolean" default="false" />
+
+    <aura:attribute name="productAction" type="String" />
+    <aura:attribute name="productDataMap" type="Object" access="global"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:attribute name="showHeader" type="boolean" access="global"/>
+    <aura:attribute name="headerText" type="String" access="global"/>
+
+    <aura:attribute name="pageMessages" type="List" default="[]"/>
+
+    <aura:attribute name="screen" type="String" />
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    
+    <div class="root slds-box">
+
+        <aura:if isTrue="{!v.showHeader}">
+            <div class="slds-text-heading_small slds-p-vertical_medium slds-text-align_center"><b>{!v.headerText}</b></div>
+        </aura:if>
+
+        <div style="width: 50%;">
+
+            <aura:if isTrue="{!(v.pageMessages.length > 0)}">
+                <ul>
+                    <aura:iteration items="{!v.pageMessages}" var="msg">
+                        <li><c:ckz_PIM_MessageDisplay severity="{!msg.severity}" message="{!msg.message}"/></li>
+                    </aura:iteration>
+                </ul>
+            </aura:if>
+
+        </div>
+
+        <aura:if isTrue="{!v.showSpinner}">
+            <div class="slds-spinner_container">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+        </aura:if>
+        {!v.body}
+    </div>
+
+</aura:component>

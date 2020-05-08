@@ -1,0 +1,21 @@
+/*
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+.THIS .uiMessage.confirm{
+    display:inline-block;
+}
+.THIS.save-bg{
+    padding-bottom: 130px;
+    background-image: url(/resource/ckz_PIM_Save_BG),url(/resource/prodwiz9000__ckz_PIM_Save_BG),url(/resource/b2bpw__ckz_PIM_Save_BG);
+    background-repeat: no-repeat;
+    background-size: 96%;
+    background-position: center bottom;
+    min-height: 220px;
+}
+
+.THIS .uiMessage{
+    display: inline-block;
+}

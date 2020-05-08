@@ -1,0 +1,109 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_SaveProduct"
+                controller="ckz_PIM_SaveProductController"
+                access="global">
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+
+    <aura:registerEvent name="reset" type="c:ckz_PIM_Reset" />
+
+    <aura:handler name="screenJump" event="c:ckz_PIM_JumpEvent"
+                  action="{!c.handleScreenJump}" />
+
+    <aura:attribute name="screen" type="String" />
+
+    <aura:attribute name="productDataMap" type="Object" default="{}" access="global"/>
+
+    <aura:attribute name="productAction" type="String" default="new"/>
+    <aura:attribute name="productId" type="String" />
+
+    <aura:attribute name="pageMessages" type="List" default="[]"/>
+
+    <aura:handler event="aura:waiting" action="{!c.waiting}" />
+    <aura:handler event="aura:doneWaiting" action="{!c.doneWaiting}"  />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:attribute name="saveErrorMsg" type="String" default="Product cannot be saved.  Please see errors below:" />
+    <aura:attribute name="saveMessage" type="String" default="Click [Save] to save your changes or click [Reset] to cancel your changes." />
+    <aura:attribute name="isSaved" type="Boolean" default="false" />
+    <aura:attribute name="hasErrors" type="Boolean" default="false" />
+
+    <c:ckz_PIM_Header title="Save Product" icon="utility:save" productName="{!v.productDataMap.productDetails.name}" sku="{!v.productDataMap.productDetails.sku}" screen="{!v.screen}" />
+
+
+    <aura:renderIf isTrue="{!v.showSpinner}">
+        <div class="slds-spinner--brand slds-spinner slds-spinner--large" role="alert">
+            <span class="slds-assistive-text">Loading, Please Wait...</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </aura:renderIf>
+
+
+    <div class="save-bg">
+        <div class="slds-p-around_medium slds-text-align_center">
+
+            <h1 class="slds-text-heading_medium slds-p-bottom_large" style="max-width:360px; margin:auto;">{!v.saveMessage}</h1>
+
+            <aura:if isTrue="{!(v.pageMessages.length > 0)}">
+                <aura:if isTrue="{! v.hasErrors}">
+                    <ul>
+                        <aura:iteration items="{!v.pageMessages}" var="msg">
+                            <li><c:ckz_PIM_MessageDisplay severity="{!msg.severity}" message="{!msg.message}"/></li>
+                        </aura:iteration>
+                    </ul>
+                </aura:if>
+            </aura:if>
+
+
+        </div>
+    </div>
+    <div class="action-footer action-footer slds-p-vertical_x-small">
+        <div class="slds-grid slds-p-bottom_small slds-p-right_small slds-p-left_small">
+
+            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doReset"
+                                  label="Reset"
+                                  variant="neutral"
+                                  onclick="{!c.handleReset}" />
+            </div>
+
+            <div class="slds-col">
+
+                <aura:if isTrue="{!(v.productAction == 'new') &amp;&amp; (v.productId != null)}">
+                    <lightning:button aura:id="doView"
+                                      label="View Product"
+                                      variant="neutral"
+                                      onclick="{!c.openRecord}" />
+                </aura:if>
+
+            </div>
+
+            <div class="slds-col slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doPrevious"
+                                  label="Previous"
+                                  variant="neutral"
+                                  onclick="{!c.handleNavigatePrev}" />
+            </div>
+
+
+
+            <div class="slds-col slds-size_1-of-10">
+                <lightning:button aura:id="doSave"
+                                  label="Save"
+                                  variant="neutral"
+                                  onclick="{!c.handleSave}" />
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

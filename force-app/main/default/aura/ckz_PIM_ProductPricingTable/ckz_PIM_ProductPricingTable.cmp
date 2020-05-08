@@ -1,0 +1,107 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductPricingTable" controller="ckz_PIM_ProductPricingController"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+
+    <aura:attribute name="screen" type="String" default="ckz_PIM_ProductPricingTable" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:handler name="screenJump" event="c:ckz_PIM_JumpEvent"
+                  action="{!c.handleScreenJump}" />
+
+    <aura:attribute name="productDataMap" type="Object" default="{}" access="global"/>
+
+    <!-- From productDataMap, selected in ProdDetail screen -->
+    <aura:attribute name="selectedStorefronts" type="List" required="true" default="[]"/>
+
+    <!-- Loaded via init -->
+    <aura:attribute name="priceListOptions" type="List" default="[]" access="global"/>
+
+    <!-- price list entry table rows -->
+    <aura:attribute name="priceListEntries" type="List" default="[]" />
+
+    <aura:attribute name="pageMessages" type="List" default="[]"/>
+
+    <c:ckz_PIM_Header title="Product Pricing" icon="utility:money" productName="{!v.productDataMap.productDetails.name}" sku="{!v.productDataMap.productDetails.sku}" screen="{!v.screen}" />
+
+    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+        <aura:if isTrue="{!(v.pageMessages.length > 0)}">
+            <ul>
+                <aura:iteration items="{!v.pageMessages}" var="msg">
+                    <li><c:ckz_PIM_MessageDisplay severity="{!msg.severity}" message="{!msg.message}"/></li>
+                </aura:iteration>
+            </ul>
+        </aura:if>
+
+    </div>
+
+    <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer slds-table_fixed-layout">
+        <thead>
+        <tr class="slds-text-heading_label">
+            <th scope="col"><div class="" title="Price List">Price List</div></th>
+            <th scope="col"><div class="" title="Price">Price</div></th>
+            <th scope="col"><div class="" title="Start Date">Start Date</div></th>
+            <th scope="col"><div class="" title="End Date">End Date</div></th>
+
+            <th scope="col"><div class="" title="Actions">Actions</div></th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- Use the Apex model and controller to fetch server side data -->
+        <aura:iteration items="{!v.priceListEntries}" var="ple">
+            <c:ckz_PIM_ProductPriceDetail priceListEntry="{!ple}" priceListOptions="{!v.priceListOptions}"/>
+        </aura:iteration>
+        </tbody>
+
+    </table>
+
+    <div class="action-footer">
+        <div class="slds-grid  slds-p-around_medium">
+
+            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doAdd"
+                                  label="Add Row"
+                                  class="slds-m-top_medium"
+                                  variant="brand"
+                                  onclick="{!c.handleAddRow}"
+                                  iconName="utility:add" 
+                                  iconPosition="left" />
+            </div>
+
+            <div class="slds-col" />
+
+            <div class="slds-col slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doPrevious"
+                                label="Previous"
+                                class="slds-m-top_medium"
+                                variant="neutral"
+                                onclick="{!c.handleNavigatePrev}" />
+            </div>
+
+
+
+            <div class="slds-col slds-size_1-of-10">
+                <lightning:button aura:id="doNext"
+                                label="Next"
+                                class="slds-m-top_medium"
+                                variant="neutral"
+                                onclick="{!c.handleNavigateNext}" />
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

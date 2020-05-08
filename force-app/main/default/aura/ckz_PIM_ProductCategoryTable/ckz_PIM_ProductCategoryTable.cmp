@@ -1,0 +1,110 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductCategoryTable"
+                controller="ckz_PIM_CategoryTree"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" />
+
+    <aura:registerEvent name="renderPanel" type="c:ckz_PIM_RenderPanelEvent" />
+
+    <aura:attribute name="screen" type="String" default="ckz_PIM_ProductCategoryTable" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:handler name="screenJump" event="c:ckz_PIM_JumpEvent"
+                  action="{!c.handleScreenJump}" />
+
+    <aura:attribute name="productDataMap" type="Object" default="{}" access="global"/>
+
+    <aura:attribute name="storefrontOptions" type="List" default="[]" access="global"/>
+
+    <!-- price list entry table rows -->
+    <aura:attribute name="productCategoryEntries" type="List" default="[]" />
+
+    <aura:attribute name="showHideExtraFields" type="Boolean" default="false" access="global"/>
+
+    <c:ckz_PIM_Header title="Categories" icon="utility:hierarchy" productName="{!v.productDataMap.productDetails.name}" sku="{!v.productDataMap.productDetails.sku}" screen="{#v.screen}" />
+
+    <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer slds-table_fixed-layout">
+        <thead>
+        <tr class="slds-text-heading_label">
+      
+            <th scope="col">
+                <div class="" title="Category">Category</div>
+            </th>
+
+                <aura:renderIf isTrue="{!v.showHideExtraFields == true}">
+                    <th scope="col"><div class="" title="Start Date">Start Date</div></th>
+                    <th scope="col"><div class="" title="End Date">End Date</div></th>
+                    <th scope="col"><div class="" title="Sequence">Sequence</div></th>
+                </aura:renderIf>
+
+            <th scope="col">
+                <div class="slds-grid">
+
+                <div class="slds-col slds-size_1-of-2 with-helper" title="Actions">Actions
+                        <lightning:helptext content="Product Categories cannot be changed once created.  Use [Clear] to remove it." />
+                    </div>
+                </div>
+            </th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+            <aura:iteration items="{!v.productCategoryEntries}" var="pce">
+                <c:ckz_PIM_ProductCategoryDetail productCategoryEntry="{!pce}" showHideExtraFields="{! v.showHideExtraFields}" storefrontOptions="{! v.storefrontOptions}" />
+            </aura:iteration>
+        </tbody>
+
+    </table>
+
+    <div class="action-footer slds-p-vertical_x-small">
+        <div class="slds-grid  slds-p-around_medium">
+
+            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doAdd"
+                                  label="Add Row"
+                                  class="slds-m-top_medium"
+                                  variant="brand"
+                                  onclick="{!c.handleAddRow}"
+                                  iconName="utility:add" 
+                                  iconPosition="left"/>
+                
+
+            </div>
+
+            <div class="slds-col">
+                <lightning:button aura:id="doShowHide"
+                                  label="Show Extra Fields"
+                                  class="slds-m-top_medium"
+                                  variant="neutral"
+                                  onclick="{!c.handleShowHideFields}" />
+            </div>
+
+            <div class="slds-col slds-size_1-of-10 slds-p-right_small">
+                <lightning:button aura:id="doPrevious"
+                                  label="Previous"
+                                  class="slds-m-top_medium"
+                                  variant="neutral"
+                                  onclick="{!c.handleNavigatePrev}" />
+            </div>
+
+            <div class="slds-col slds-size_1-of-10">
+                <lightning:button aura:id="doNext"
+                                  label="Next"
+                                  class="slds-m-top_medium"
+                                  variant="neutral"
+                                  onclick="{!c.handleNavigateNext}" />
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

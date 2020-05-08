@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+.THIS .slds-button_gray {
+    background-color: #C9C7C5;
+    border-color: #C9C7C5;
+}
+
+.THIS .slds-button_gray:hover {
+   background-color: rgba(27, 82, 151, 1);
+    border-color: rgba(27, 82, 151, 1);
+}

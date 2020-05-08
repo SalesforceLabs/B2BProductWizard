@@ -1,0 +1,26 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_Jump"
+                access="global">
+
+    <ltng:require scripts="{!$Resource.ckz_PIM_Utilities}" afterScriptsLoaded="{!c.loadScreenOptions}"/>
+
+    <aura:attribute name="screen" type="String" access="global"/>
+
+    <aura:registerEvent name="screenJump" type="c:ckz_PIM_JumpEvent" />
+
+    <aura:attribute name="screenOptions" type="List" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <div>
+        <div>
+            <lightning:combobox aura:id="selectScreen" name="screen" label="Jump to" placeholder="-- Select One --" options="{! v.screenOptions}" value="{!v.screen}" onchange="{! c.handleScreenChange}" />
+        </div>
+    </div>
+
+</aura:component>

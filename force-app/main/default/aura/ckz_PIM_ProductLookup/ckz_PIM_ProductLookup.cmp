@@ -1,0 +1,104 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<aura:component description="ckz_PIM_ProductLookup"
+    controller="ckz_PIM_TypeaheadController" access="global">
+
+    <aura:attribute Name="selItem" type="object" access="public" description="This attribute can be used by parent component to read selected record"/>
+    <aura:attribute Name="server_result" type="object[]" access="private" />
+
+    <!--<aura:attribute name="lookupIcon" type="String" access="public" default="utility:assignment"/>-->
+    <aura:attribute name="lookupIcon" type="String" access="public" default="standard:product"/>
+
+    <aura:attribute name="objectName" type="String" access="public" default="ccrz__E_Product__c" description="Name of Object to be searched"/>
+    <aura:attribute name="field_API_text" type="String" access="public" description="API Name of field, to be used to show text"/>
+    <aura:attribute name="field_API_val" type="String" access="public" description="API Name of field, to be returned from component"/>
+    <aura:attribute name="fieldsToSearch" type="String" access="public" default="Name,ccrz__SKU__c" description="API Name of fields to be searched"/>
+    <aura:attribute name="fieldsToReturn" type="String" access="public" default="Id,Name,ccrz__SKU__c" description="API Name of fields to be returned"/>
+    <aura:attribute name="orderBy" type="String" default="ccrz__SKU__c" />
+    <aura:attribute name="limit" type="Integer" access="public" default="50" description="Total number of record to be returned"/>
+    <aura:attribute name="placeholder" type="String" access="public" default="" />
+
+    <!-- This is to make things efficient, if the user searches for the same thing as before -->
+    <aura:attribute name="last_SearchText" type="String" access="private" />
+    <aura:attribute name="last_ServerResult" type="object[]" access="private" />
+
+    <div class="slds">
+        <div class="slds-form-element">
+            <!--<label class="slds-form-element__label" for="combobox-unique-id">Search for a product</label>-->
+            <div class="slds-form-element__control">
+                <div class="slds-combobox_container slds-has-inline-listbox">
+                    <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open"
+                            aria-expanded="true" aria-haspopup="listbox" role="combobox" style="width:95%">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                            <div>
+                                <aura:if isTrue="{! empty(v.selItem) }">
+                                    <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
+                                            aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
+                                            aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
+                                            placeholder="{!v.placeholder}"
+                                            onkeyup="{!c.serverCall}" />
+                                    <aura:set attribute="else">
+                                                <!-- Displayed when the user has chosen an option -->
+                                                <span class="slds-pill slds-pill_link fullWidth">
+
+                                                    <!-- reference a selItem property for the displayable text -->
+                                                    <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selItem.Name}">
+
+                                                        <lightning:icon iconName="{#v.lookupIcon}" size="x-small"/>
+
+                                                        <!-- reference a selItem property for the displayable text -->
+                                                        <span class="slds-pill__label slds-p-left_x-small">{# v.selItem.ccrz__SKU__c + ' ' + v.selItem.Name}</span>
+                                                    </a>
+
+                                                    <button onclick="{!c.clearSelection}" class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove">
+                                                        <lightning:icon iconName="utility:close" size="small" alternativeText="Press delete or backspace to remove"/>
+                                                        <span class="slds-assistive-text" >Remove</span>
+                                                    </button>
+                                                </span>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+                        <aura:if isTrue="{! greaterthanorequal(v.server_result.length,1) }">
+                            <div id="listbox-unique-id" role="listbox" >
+                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation"
+                                    style="display: block; min-width: auto; max-width: 100% ; width: 100%;">
+                                    <aura:iteration items="{!v.server_result}" var="item" indexVar="i">
+                                        
+                                        <li role="presentation"
+                                            class="slds-listbox__item" 
+                                            data-selectedIndex="{#i}" onclick="{!c.itemSelected}">
+                                            <div id="{#'listbox-option-unique-id-'+i+1}"
+                                                class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                role="option">
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <span class="slds-icon_container">
+                                                        <lightning:icon iconName="{#v.lookupIcon}" size="small"/>
+                                                    </span>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                                                        <span>
+                                                            {#item.ccrz__SKU__c}
+                                                        </span>
+                                                    </span>
+                                                    <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{#item.Name}</span>
+                                                </span>
+                                            </div>
+                                        </li>
+
+                                    </aura:iteration>
+                                </ul>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aura:component>
