@@ -42,6 +42,10 @@ This will deploy the source to whatever org you have associated with your SF DX 
 
 Add the B2B Commerce Product Wizard component to the CC Product record page, or any stand-alone Lightning page.
 
+![CC Product Record page](ProductWizard1.PNG)
+
+![CC Product Record page](ProductWizard13.PNG)
+
 ## Contributing
 
 1. Fork it!
@@ -68,7 +72,9 @@ This project is licensed under the BSD 3-Clause - see the [LICENSE.md](LICENSE.m
 * Brandon Rogers
 * Jessica McConoghy
 * Tana Babcock
+* Michael Cala
 * Samuel Check
 * Dinesh Gajwani
 * Tim Siukola
 * Jason Illg
+* Steve Ecker
