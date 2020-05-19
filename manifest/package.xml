@@ -1,36 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>ckz_PIM_CategoryTree</members>
+        <members>ckz_PIM_CategoryTreeTest</members>
+        <members>ckz_PIM_LookupController</members>
+        <members>ckz_PIM_LookupControllerTest</members>
+        <members>ckz_PIM_MainController</members>
+        <members>ckz_PIM_MainControllerTest</members>
+        <members>ckz_PIM_ProductDetailController</members>
+        <members>ckz_PIM_ProductDetailControllerTest</members>
+        <members>ckz_PIM_ProductPricingController</members>
+        <members>ckz_PIM_ProductPricingControllerTest</members>
+        <members>ckz_PIM_SaveProductController</members>
+        <members>ckz_PIM_SaveProductControllerTest</members>
+        <members>ckz_PIM_SecurityUtils</members>
+        <members>ckz_PIM_TestUtils</members>
+        <members>ckz_PIM_TypeaheadController</members>
+        <members>ckz_PIM_TypeaheadControllerTest</members>
+        <members>ckz_PIM_UpdateCacheService</members>
+        <members>ckz_PIM_UpdateCacheServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>ckz_PIM_CategorySelectDialogEvent</members>
+        <members>ckz_PIM_Header</members>
+        <members>ckz_PIM_Jump</members>
+        <members>ckz_PIM_JumpEvent</members>
+        <members>ckz_PIM_Lookup</members>
+        <members>ckz_PIM_MainPanel</members>
+        <members>ckz_PIM_MessageDisplay</members>
+        <members>ckz_PIM_NewSpecDialog</members>
+        <members>ckz_PIM_NewSpecDialogEvent</members>
+        <members>ckz_PIM_ProdDetail</members>
+        <members>ckz_PIM_ProductCategoryDetail</members>
+        <members>ckz_PIM_ProductCategorySelectDialog</members>
+        <members>ckz_PIM_ProductCategoryTable</members>
+        <members>ckz_PIM_ProductChooser</members>
+        <members>ckz_PIM_ProductLookup</members>
+        <members>ckz_PIM_ProductMediaDetail</members>
+        <members>ckz_PIM_ProductMediaTable</members>
+        <members>ckz_PIM_ProductPriceDetail</members>
+        <members>ckz_PIM_ProductPricingTable</members>
+        <members>ckz_PIM_ProductSpecDetail</members>
+        <members>ckz_PIM_ProductSpecTable</members>
+        <members>ckz_PIM_RelatedProductDetail</members>
+        <members>ckz_PIM_RelatedProductTable</members>
+        <members>ckz_PIM_RenderPanelEvent</members>
+        <members>ckz_PIM_Reset</members>
+        <members>ckz_PIM_SaveProduct</members>
+        <members>ckz_PIM_ScreenOptionsDisplay</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
-        <members>*</members>
-        <name>LightningComponentBundle</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>ckz_PIM_Save_BG</members>
+        <members>ckz_PIM_Utilities</members>
         <name>StaticResource</name>
     </types>
-    <version>47.0</version>
+    <version>48.0</version>
 </Package>
