@@ -99,6 +99,12 @@ global with sharing class ckz_PIM_UpdateCacheService {
 
             messages.add('product spec index updated');
 
+// Product Index
+            ccrz.ccProductIndexBuilder.build(new Map<String,Object>{
+                ccrz.ccAPIProductIndex.LOCALES => localeStringSet,
+                ccrz.ccAPIProductIndex.CLEAN_ONLY => TRUE
+            });
+
         } catch (Exception e) {
             messages.add('Exception: ' + e.getMessage());  System.debug('Exception: ' + e.getMessage());
             messages.add('Exception: ' + e.getLineNumber());  System.debug('Line: ' + e.getLineNumber());

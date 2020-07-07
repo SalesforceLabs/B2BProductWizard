@@ -104,6 +104,7 @@ public with sharing class ckz_PIM_SaveProductController {
             responseMap.put('productDataSavedMsg', 'Product data saved successfully');
 
             // Update the various caches/indexes
+            // This may not work with external users.  If that is the case, schedule the ckz_PIM_ScheduledCacheRebuild class to periodically update the indicies.
             ckz_PIM_UpdateCacheService.doUpdate();
 
         }

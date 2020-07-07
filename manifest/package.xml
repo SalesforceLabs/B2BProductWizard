@@ -19,6 +19,7 @@
         <members>ckz_PIM_TypeaheadControllerTest</members>
         <members>ckz_PIM_UpdateCacheService</members>
         <members>ckz_PIM_UpdateCacheServiceTest</members>
+        <members>ckz_PIM_ScheduledCacheRebuild</members>
         <name>ApexClass</name>
     </types>
     <types>
