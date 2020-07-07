@@ -59,6 +59,9 @@ Add the B2B Commerce Product Wizard component to the CC Product record page, or 
 * 1.0.2
     * Initial release
 
+* 1.2.0
+    * Fix for updating the product index
+
 ## Authors
 
 * **Michael Sobczak** - *Initial work* - [Salesforce.com](https://salesforce.com)
